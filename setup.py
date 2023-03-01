@@ -26,6 +26,7 @@ setup(
     install_requires=requirements,
     python_requires='>=3.8',
     project_urls={
+        "Documentation": "https://murph.readthedocs.io",
         "Source Code": "https://github.com/mgesoftware/murph",
         "Issue Tracker": "https://github.com/mgesoftware/murph/issues",
         "PyPI": "https://pypi.org/project/murph/",
