@@ -8,7 +8,7 @@ By using Murph's core feature of automatic Protobuf file generation, you can sig
 
 Although Murph is in an early stage of development, more features will come to the framework soon. We encourage developers to contribute to the public repository and help us make Murph an even more powerful and flexible framework.
 
-Whether you're a seasoned developer or just starting out, Murph is the perfect choice for building fast, reliable GRPC services in Python. Experience the power and flexibility of Murph for yourself today.
+Whether you're a seasoned developer or just starting out, Murph is the perfect choice for building fast, reliable GRPC services in Python.
 
 ## Key Features
 
@@ -36,4 +36,4 @@ pip install murph
 
 ## Conclusion
 
-Murph is a powerful, easy-to-use Python framework for building fast, reliable GRPC services. With its Django-like models and automatic Protobuf generation, Murph makes it easy to create complex data models and high-performance services. We invite you to contribute to the public repository and help us make Murph even better. Whether you're a seasoned developer or just starting out, Murph is the perfect choice for your next GRPC project.
+Murph is a powerful, easy-to-use Python framework for building fast, reliable GRPC services. With its Django-like models and automatic Protobuf generation, Murph makes it easy to create complex data models and high-performance services. We invite you to contribute to the public repository and help us make Murph even better.
