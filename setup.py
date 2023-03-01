@@ -45,7 +45,6 @@ setup(
         "Framework :: AsyncIO",
         "Framework :: Django",
         "Framework :: Flask",
-        "Topic :: GRPC",
         "Typing :: Typed"
     ]
 )
