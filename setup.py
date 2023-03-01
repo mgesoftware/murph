@@ -14,7 +14,7 @@ with open("murph/__init__.py", encoding="utf8") as f:
 setup(
     name='murph',
     version=version,
-    license='BSD 3-Clause "New" or "Revised"',
+    license='BSD-3-Clause',
     author="Alexandru Plesoiu",
     author_email='alexandru@mgesoftware.com',
     description="Murph is a fast and efficient Python framework for building GRPC services. With automatic Protobuf file generation and a simplified development process, Murph makes it easy to build high-performance services with ease.",
