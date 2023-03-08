@@ -42,7 +42,7 @@ class Message(metaclass=MessageMetaclass):
         return cls._proto_descriptor.SerializeToString()
 
     @classmethod
-    def export_to_proto_file(cls, stand_alone=False):
+    def get_proto_content(cls, stand_alone=False):
         default_implementation = descriptor._message
         field_map = {
             1: "double",

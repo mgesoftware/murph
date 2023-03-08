@@ -25,7 +25,7 @@ class Service(metaclass=ServiceMetaclass):
         return handler
 
     @classmethod
-    def export_to_proto_file(cls, stand_alone=False, complete_export=False):
+    def get_proto_content(cls, stand_alone=False, complete_export=False) -> str:
 
         proto_file = ''
         proto_file_header = ''
@@ -64,7 +64,7 @@ class Service(metaclass=ServiceMetaclass):
         service_messages = list(set(service_messages))
 
         for message in service_messages:
-            proto_file_header += message.export_to_proto_file() + '\n'
+            proto_file_header += message.get_proto_content() + '\n'
 
         proto_file = proto_file_header + proto_file
         return proto_file
