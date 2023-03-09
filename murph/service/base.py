@@ -24,6 +24,9 @@ class Service(metaclass=ServiceMetaclass):
 
         return handler
 
+    def get_handlers(self):
+        return self._handlers
+
     @classmethod
     def get_proto_content(cls, stand_alone=False, complete_export=False) -> str:
 
