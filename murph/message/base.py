@@ -70,7 +70,7 @@ class Message(metaclass=MessageMetaclass):
             18: "sint64"
         }
 
-        fields = inspect.getmembers(cls.message_cls, lambda a: not (inspect.isroutine(a)))
+        fields = inspect.getmembers(cls.message_class, lambda a: not (inspect.isroutine(a)))
         fields = [a for a in fields if not (a[0].startswith('__') and a[0].endswith('__'))]
 
         # Write the .proto file header
@@ -79,7 +79,7 @@ class Message(metaclass=MessageMetaclass):
             proto_file += 'syntax = "{}";\n\n'.format(cls.syntax)
             proto_file += 'package {};\n\n'.format(cls.package)
 
-        proto_file += 'message {} {{\n'.format(cls.message_cls.__name__)
+        proto_file += 'message {} {{\n'.format(cls.message_class.__name__)
 
         # Write the fields of the message to the .proto file
         for field in fields:
