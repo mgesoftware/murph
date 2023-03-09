@@ -24,10 +24,10 @@ class ServiceMetaclass(type):
                 output_type = annotations.get('output_type')
 
                 if input_type:
-                    request_deserializer = input_type.message_cls.FromString
+                    request_deserializer = input_type.message_class.FromString
 
                 if output_type:
-                    response_serializer = output_type.message_cls.SerializeToString
+                    response_serializer = output_type.message_class.SerializeToString
             else:
                 # If it's not callable or the method wasn't decorated with ServiceMethod it means 
                 # that we don't have a grpc method so we skip
@@ -35,7 +35,7 @@ class ServiceMetaclass(type):
 
             # Add the handler for grpc method to _handlers variable
             function_handler = {
-                f"/{attrs['package']}.{name}/{function_name}":
+                f"{function_name}":
                     grpc.unary_unary_rpc_method_handler(
                         types.MethodType(func, object()),  # Make a bound method
                         request_deserializer=request_deserializer,
