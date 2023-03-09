@@ -173,8 +173,19 @@ class Server:
         Returns:
             None
         """
+        # Set the default path to service class name
+        handler_path = type(service).__name__
 
-        self.add_generic_rpc_handlers((service, ))
+        # Add package to the path
+        if service.package is not None or "":
+            handler_path = f"{service.package}.{handler_path}"
+
+        generic_handler = grpc.method_handlers_generic_handler(
+            handler_path, service.get_handlers()
+        )
+
+        self.add_generic_rpc_handlers((generic_handler,))
+
         self._services.append(service)
 
         # Remove service duplicates
@@ -238,9 +249,6 @@ class Server:
         Returns:
             None
         """
-
-        if len(self._services) < 1:
-            raise ValueError("No services added to the server")
 
         # Export protobuf files before starting the server
         if self._export_protos:
