@@ -31,6 +31,11 @@ class Message(metaclass=MessageMetaclass):
         except KeyError:
             object.__setattr__(self, name, value)
 
+    @classmethod
+    @property
+    def message_class(cls) -> None:
+        return cls.message_cls
+
     def validate(cls) -> None:
         """Validate the entire object"""
         super().validate(cls)
