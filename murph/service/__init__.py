@@ -1,2 +1,3 @@
 from .base import Service
-from .service_method import ServiceMethod
+from .decorators import grpc_method
+from .handlers import RPCHandler

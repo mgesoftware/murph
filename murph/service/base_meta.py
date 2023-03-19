@@ -1,11 +1,14 @@
-import grpc
+from .handlers import create_rpc_method_handler
 import types
 
 
 class ServiceMetaclass(type):
     def __new__(cls, name, bases, attrs):
         # Get the list of all functions defined by user
-        function_objects = {name: value for name, value in attrs.items() if callable(value) and not name.startswith('__')}
+        function_objects = {
+            name: value for name, value in attrs.items()
+            if callable(value) and not name.startswith('__')
+        }
         attrs['_handlers'] = {}
 
         # Create handlers for each service method
@@ -20,23 +23,25 @@ class ServiceMetaclass(type):
                 if not grpc_service_method:
                     continue
 
-                input_type = annotations.get('input_type')
-                output_type = annotations.get('output_type')
+                request_type = annotations.get('request_type')
+                response_type = annotations.get('response_type')
 
-                if input_type:
-                    request_deserializer = input_type.message_class.FromString
+                if request_type:
+                    request_deserializer = request_type.message_class.FromString
 
-                if output_type:
-                    response_serializer = output_type.message_class.SerializeToString
+                if response_type:
+                    response_serializer = response_type.message_class.SerializeToString
             else:
-                # If it's not callable or the method wasn't decorated with ServiceMethod it means 
+                # If it's not callable or the method wasn't decorated with grpc_method it means
                 # that we don't have a grpc method so we skip
                 continue
 
             # Add the handler for grpc method to _handlers variable
+            handler_type = annotations.get('handler_type')
+            handler = create_rpc_method_handler(handler_type)
             function_handler = {
                 f"{function_name}":
-                    grpc.unary_unary_rpc_method_handler(
+                    handler(
                         types.MethodType(func, object()),  # Make a bound method
                         request_deserializer=request_deserializer,
                         response_serializer=response_serializer,

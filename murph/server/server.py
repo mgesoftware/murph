@@ -3,6 +3,7 @@ from concurrent import futures
 from typing import List, Any, Optional, Tuple, Iterable
 import os
 import grpc
+from murph.export import export_service
 
 
 class Server:
@@ -38,7 +39,8 @@ class Server:
             handlers: An optional list of GenericRpcHandler objects to use for handling RPCs.
             interceptors: An optional list of ServerInterceptor objects to use for intercepting RPCs.
             options: An optional tuple specifying additional options to pass to the server.
-            maximum_concurrent_rpcs: An optional integer specifying the maximum number of concurrent RPCs the server can handle.
+            maximum_concurrent_rpcs: An optional integer specifying the maximum number
+            of concurrent RPCs the server can handle.
             compression: An optional Compression object to use for compressing RPC payloads.
             xds: A boolean specifying whether or not to use the xDS protocol for service discovery.
 
@@ -177,7 +179,7 @@ class Server:
         handler_path = type(service).__name__
 
         # Add package to the path
-        if service.package is not None or "":
+        if service.package and service.package != "":
             handler_path = f"{service.package}.{handler_path}"
 
         generic_handler = grpc.method_handlers_generic_handler(
@@ -209,17 +211,18 @@ class Server:
 
         for service in self._services:
             # Construct the file path
-            file_prefix = ""
-            if service.package:
-                file_prefix = service.package.replace(".", "_")
+            if service.package and service.package != "":
+                package_prefix = service.package.replace(".", "_")
+                file_name = f"{package_prefix}_{type(service).__name__.lower()}.proto"
+            else:
+                file_name = f"{type(service).__name__.lower()}.proto"
 
-            file_name = f"{file_prefix}_{type(service).__name__.lower()}.proto"
             file_path = os.path.join(self._protos_directory, file_name)
 
             # Write protobufs to file
             print(f"Writing {file_name} to {self._protos_directory} directory...")
             with open(file_path, "w") as file:
-                file.write(service.get_proto_content(complete_export=True))
+                file.write(export_service(service, complete_export=True))
                 print(f"{file_name} has been written succesfully!")
 
     @property
@@ -249,6 +252,9 @@ class Server:
         Returns:
             None
         """
+
+        # if len(self._services) < 1:
+        #     raise ValueError("No services added to the server")
 
         # Export protobuf files before starting the server
         if self._export_protos:
@@ -285,7 +291,8 @@ class Server:
         Stops the gRPC server and removes all ports.
 
         Args:
-            grace: An integer specifying the number of seconds to wait for pending RPCs to complete before shutting down the server.
+            grace: An integer specifying the number of seconds to wait for pending RPCs to complete
+            before shutting down the server.
 
         Returns:
             None
@@ -300,7 +307,8 @@ class Server:
         Stops the gRPC server and waits for all RPCs to complete.
 
         Args:
-            grace: An integer specifying the number of seconds to wait for pending RPCs to complete before shutting down the server.
+            grace: An integer specifying the number of seconds to wait for pending RPCs to complete
+            before shutting down the server.
 
         Returns:
             None
